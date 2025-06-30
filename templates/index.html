@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PopMart Bot (Selenium)</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>PopMart Automation Tool</h1>
+        
+        <div class="grid-container">
+            <!-- Account Form -->
+            <div class="form-section">
+                <h2>Add Account</h2>
+                <input type="email" id="new-email" placeholder="Google Email">
+                <input type="password" id="new-password" placeholder="PopMart Password">
+                <button id="add-account-btn">Save Account</button>
+            </div>
+
+            <!-- Product Form -->
+            <div class="form-section">
+                <h2>Run Bot</h2>
+                <input type="text" id="product-url" placeholder="Product URL">
+                <input type="number" id="quantity" placeholder="Quantity" min="1">
+                <select id="action">
+                    <option value="add">Add to Cart</option>
+                    <option value="buy">Buy Now</option>
+                </select>
+                <button id="start-bot-btn">Start Bot</button>
+                <button id="stop-bot-btn">Stop Bot</button>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="logs">
+            <h2>Logs</h2>
+            <div id="log-output"></div>
+        </div>
+    </div>
+    <script src="../static/script.js"></script>
+</body>
+</html>

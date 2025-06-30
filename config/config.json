@@ -1,0 +1,33 @@
+{
+  "chrome_settings": {
+    "profile_path": "C:\\Users\\AHAD COMPUTERS\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
+    "profile_name": "Magma",
+    "chromedriver_path": "chromedriver-win64/chromedriver.exe",
+    "chrome_executable_path": "chrome-win32/chrome.exe"
+  },
+  "selectors": {
+    "popup_close": ".index_closeIcon__oBwY4",
+    "policy_accept": ".policy_acceptBtn__ZNU71",
+    "login_field": ".index_loginInput__HBgjq",
+    "login_btn": "index_loginButton__O6r8l",
+    "google_login": "#__next > div > div > div.layout_pcLayout__49ZwP > div > div > div.index_otherLogin__7AmL6 > div:nth-child(2) > span > img",
+    "password_field": "#password",
+    "add_to_bag": "#__next > div > div > div.layout_pcLayout__49ZwP > div.products_container__T0mpL > div.products_headerBlock__CESKr > div.products_rightBlock__bf2x5 > div > div.index_actionContainer__EqFYe > div",
+    "open_cart": ".index_cartItem__xumFD",
+    "select_all": ".index_checkbox__w_166",
+    "checkout_btn": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_checkout__V9YPC",
+    "proceed_to_pay": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_placeOrderBtn__wgYr6",
+    "true_mo_pay": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_selectContainer__x1gWd > div:nth-child(3) > div",
+    "ordering": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_payBtnContainer__FJanj > button"
+  },
+  "accounts": [
+    {
+      "email": "clarapolakmd@gmail.com",
+      "password": "auto123!"
+    },
+    {
+      "email": "benmcproperties@gmai.com",
+      "password": "auto123!"
+    }
+  ]
+}
