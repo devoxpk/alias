@@ -4,6 +4,7 @@ import os
 import json
 from bot import PopMartBot
 import threading
+from flask_cors import CORS
 
 # Global bot instance
 bot = None
@@ -15,8 +16,8 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__,
             template_folder=os.path.join(PROJECT_ROOT, 'templates'),
             static_folder=os.path.join(PROJECT_ROOT, 'static'))
-socketio = SocketIO(app)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app)
 # Config path - now using proper path joining
 CONFIG_PATH = os.path.join(PROJECT_ROOT, 'config', 'config.json')
 
@@ -97,7 +98,7 @@ def start_bot():
     def run_bot():
         global bot
         try:
-            bot.run(product_url, action, quantity, email=email, password=password)
+            bot.run(product_url, action, quantity)
         except Exception as e:
             bot.log(f"Bot error: {str(e)}")
         finally:

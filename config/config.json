@@ -6,10 +6,10 @@
     "chrome_executable_path": "chrome-win32/chrome.exe"
   },
   "selectors": {
-    "popup_close": ".index_closeIcon__oBwY4",
+    "popup_close": "div.index_closeContainer__vm5Us > img.index_closeIcon__oBwY4",
     "policy_accept": ".policy_acceptBtn__ZNU71",
-    "login_field": ".index_loginInput__HBgjq",
-    "login_btn": "index_loginButton__O6r8l",
+    "login_field": "div.ant-form-item-control-input-content > input#email.ant-input.index_loginInput__HBgjq",
+    "login_btn": "div.ant-form-item button.ant-btn.ant-btn-primary.index_loginButton__O6r8l[type=\"submit\"]",
     "google_login": "#__next > div > div > div.layout_pcLayout__49ZwP > div > div > div.index_otherLogin__7AmL6 > div:nth-child(2) > span > img",
     "password_field": "#password",
     "add_to_bag": "#__next > div > div > div.layout_pcLayout__49ZwP > div.products_container__T0mpL > div.products_headerBlock__CESKr > div.products_rightBlock__bf2x5 > div > div.index_actionContainer__EqFYe > div",

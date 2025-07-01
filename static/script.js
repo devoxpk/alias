@@ -1,5 +1,5 @@
 // WebSocket connection for real-time logs
-const socket = io();
+const socket = io('http://127.0.0.1:5000');
 
 // DOM Elements
 const addAccountBtn = document.getElementById('add-account-btn');
@@ -17,7 +17,7 @@ addAccountBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('/add_account', {
+        const response = await fetch('http://127.0.0.1:5000/add_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -50,7 +50,8 @@ startBotBtn.addEventListener('click', async () => {
 
     try {
         addLog('Starting bot...');
-        const response = await fetch('/start', {
+        console.log('Attempting to send fetch request to /start');
+        const response = await fetch('http://127.0.0.1:5000/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -59,7 +60,7 @@ startBotBtn.addEventListener('click', async () => {
                 action 
             })
         });
-        
+        console.log('Fetch request sent, waiting for JSON response.');
         const result = await response.json();
         if (result.success) {
             addLog('Bot completed successfully');
@@ -77,7 +78,7 @@ if (stopBotBtn) {  // Check if stop button exists
     stopBotBtn.addEventListener('click', async () => {
         try {
             addLog('Stopping bot...');
-            const response = await fetch('/stop', {
+            const response = await fetch('http://127.0.0.1:5000/stop', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
