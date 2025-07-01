@@ -1,33 +1,66 @@
 {
-  "chrome_settings": {
-    "profile_path": "C:\\Users\\AHAD COMPUTERS\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
-    "profile_name": "Magma",
-    "chromedriver_path": "chromedriver-win64/chromedriver.exe",
-    "chrome_executable_path": "chrome-win32/chrome.exe"
-  },
-  "selectors": {
-    "popup_close": "div.index_closeContainer__vm5Us > img.index_closeIcon__oBwY4",
-    "policy_accept": ".policy_acceptBtn__ZNU71",
-    "login_field": "div.ant-form-item-control-input-content > input#email.ant-input.index_loginInput__HBgjq",
-    "login_btn": "div.ant-form-item button.ant-btn.ant-btn-primary.index_loginButton__O6r8l[type=\"submit\"]",
-    "google_login": "#__next > div > div > div.layout_pcLayout__49ZwP > div > div > div.index_otherLogin__7AmL6 > div:nth-child(2) > span > img",
-    "password_field": "#password",
-    "add_to_bag": "#__next > div > div > div.layout_pcLayout__49ZwP > div.products_container__T0mpL > div.products_headerBlock__CESKr > div.products_rightBlock__bf2x5 > div > div.index_actionContainer__EqFYe > div",
-    "open_cart": ".index_cartItem__xumFD",
-    "select_all": ".index_checkbox__w_166",
-    "checkout_btn": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_checkout__V9YPC",
-    "proceed_to_pay": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_placeOrderBtn__wgYr6",
-    "true_mo_pay": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_selectContainer__x1gWd > div:nth-child(3) > div",
-    "ordering": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_payBtnContainer__FJanj > button"
-  },
-  "accounts": [
-    {
-      "email": "clarapolakmd@gmail.com",
-      "password": "auto123!"
+    "chrome_settings": {
+        "profile_path": "C:\\Users\\AHAD COMPUTERS\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2",
+        "profile_name": "Magma",
+        "chromedriver_path": "chromedriver-win64/chromedriver.exe",
+        "chrome_executable_path": "chrome-win32/chrome.exe"
     },
-    {
-      "email": "benmcproperties@gmai.com",
-      "password": "auto123!"
-    }
-  ]
+    "selectors": {
+        "popup_close": "div.index_closeContainer__vm5Us > img.index_closeIcon__oBwY4",
+        "policy_accept": ".policy_acceptBtn__ZNU71",
+        "login_field": "div.ant-form-item-control-input-content > input#email.ant-input.index_loginInput__HBgjq",
+        "login_btn": "div.ant-form-item button.ant-btn.ant-btn-primary.index_loginButton__O6r8l[type=\"submit\"]",
+        "google_login": "#__next > div > div > div.layout_pcLayout__49ZwP > div > div > div.index_otherLogin__7AmL6 > div:nth-child(2) > span > img",
+        "password_field": "#password",
+        "add_to_bag": "#__next > div > div > div.layout_pcLayout__49ZwP > div.products_container__T0mpL > div.products_headerBlock__CESKr > div.products_rightBlock__bf2x5 > div > div.index_actionContainer__EqFYe > div",
+        "open_cart": ".index_cartItem__xumFD",
+        "select_all": ".index_checkbox__w_166",
+        "checkout_btn": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_checkout__V9YPC",
+        "proceed_to_pay": ".ant-btn.ant-btn-primary.ant-btn-dangerous.index_placeOrderBtn__wgYr6",
+        "true_mo_pay": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_selectContainer__x1gWd > div:nth-child(3) > div",
+        "ordering": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_payBtnContainer__FJanj > button",
+        "quantity_increment_btn": ".index_quantityInfoBlock_ZlxOe > div.index_countButtonmJU5Q:not(.index_disableBtn_cDpGw)",
+        "credit_card_option": "div.index_optionItemActive__SEsVB",
+        "card_input_form": "div.adyen-checkout__card-input",
+        "card_number_frame": "span[data-cse='encryptedCardNumber'] iframe",
+        "expiry_date_frame": "span[data-cse='encryptedExpiryDate'] iframe",
+        "cvv_frame": "span[data-cse='encryptedSecurityCode'] iframe",
+        "cardholder_name": "input[name='holderName']",
+        "pay_button": "button.adyen-checkout__button--pay"
+    },
+    "accounts": [
+        {
+            "email": "clarapolakmd@gmail.com",
+            "password": "auto123!",
+            "payment": {
+                "card_number": "4111111111111111",
+                "expiry_month": 12,
+                "expiry_year": 2025,
+                "holder_name": "CLARA POLAK",
+                "cvv": "123"
+            }
+        },
+        {
+            "email": "benmcproperties@gmai.com",
+            "password": "auto123!",
+            "payment": {
+                "card_number": "4222222222222222",
+                "expiry_month": 6,
+                "expiry_year": 2026,
+                "holder_name": "BEN MC",
+                "cvv": "456"
+            }
+        },
+        {
+            "email": "testemail123@gmail.com",
+            "password": "test123",
+            "payment": {
+                "card_number": "4111111111111111",
+                "expiry_month": 12,
+                "expiry_year": 2027,
+                "holder_name": "test holder",
+                "cvv": "123"
+            }
+        }
+    ]
 }

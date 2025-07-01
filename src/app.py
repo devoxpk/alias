@@ -6,11 +6,11 @@ from bot import PopMartBot
 import threading
 from flask_cors import CORS
 
-# Global bot instance
-bot = None
+# Global bot management
+active_bots = []
 bot_lock = threading.Lock()
 
-# Get the absolute path to the project root
+# Project setup
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 app = Flask(__name__,
@@ -18,33 +18,52 @@ app = Flask(__name__,
             static_folder=os.path.join(PROJECT_ROOT, 'static'))
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
-# Config path - now using proper path joining
 CONFIG_PATH = os.path.join(PROJECT_ROOT, 'config', 'config.json')
 
 @app.route('/')
 def home():
-    """Render the main page"""
-    return render_template('index.html')  # Let Flask handle the path automatically
+    """Render main page"""
+    return render_template('index.html')
 
 @app.route('/add_account', methods=['POST'])
 def add_account():
+    """Add new account to config"""
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
+    payment = data.get('payment')
 
     if not email or not password:
         return jsonify({"success": False, "message": "Email and password are required"})
+
+    if not payment:
+        return jsonify({"success": False, "message": "Payment details are required"})
+
+    required_payment_fields = ['card_number', 'expiry_month', 'expiry_year', 'holder_name', 'cvv']
+    if not all(field in payment and payment[field] for field in required_payment_fields):
+        return jsonify({"success": False, "message": "All payment fields are required"})
 
     try:
         with open(CONFIG_PATH, 'r') as f:
             config = json.load(f)
 
         accounts = config.get('accounts', [])
-        # Check if account already exists
         if any(acc['email'] == email for acc in accounts):
             return jsonify({"success": False, "message": "Account already exists"})
 
-        accounts.append({"email": email, "password": password})
+        new_account = {
+            "email": email,
+            "password": password,
+            "payment": {
+                "card_number": payment['card_number'],
+                "expiry_month": payment['expiry_month'],
+                "expiry_year": payment['expiry_year'],
+                "holder_name": payment['holder_name'],
+                "cvv": payment['cvv']
+            }
+        }
+
+        accounts.append(new_account)
         config['accounts'] = accounts
 
         with open(CONFIG_PATH, 'w') as f:
@@ -56,23 +75,28 @@ def add_account():
 
 @app.route('/stop', methods=['POST'])
 def stop_bot():
-    global bot
+    """Stop all active bot instances"""
+    global active_bots
     with bot_lock:
-        if bot:
-            bot.stop()
-            bot = None
-            return jsonify({"success": True, "message": "Bot stopped"})
-        return jsonify({"success": False, "message": "No bot running"})
+        if not active_bots:
+            return jsonify({"success": False, "message": "No bots running"})
+        
+        for bot in active_bots:
+            try:
+                bot._running = False
+                if bot.driver:
+                    bot.driver.quit()
+            except Exception as e:
+                print(f"Error stopping bot: {e}")
+        
+        active_bots = []
+        return jsonify({"success": True, "message": "All bots stopped"})
 
 @app.route('/start', methods=['POST'])
 def start_bot():
-    global bot
+    """Start new bot instance"""
+    global active_bots
     data = request.get_json()
-
-    # Check if bot is already running
-    with bot_lock:
-        if bot:
-            return jsonify({"success": False, "message": "Bot is already running"})
 
     # Validate input
     product_url = data.get('product_url')
@@ -83,31 +107,31 @@ def start_bot():
         return jsonify({"success": False, "message": "Missing required parameters"})
 
     try:
-        with open(CONFIG_PATH, 'r') as f:
-            config = json.load(f)
-        accounts = config.get('accounts', [])
-        if not accounts:
-            return jsonify({"success": False, "message": "No accounts configured"})
-        email = accounts[0].get('email')
-        password = accounts[0].get('password')
-    except Exception as e:
-        return jsonify({"success": False, "message": f"Failed to load accounts: {str(e)}"})
+        # Create new bot instance with first account
+        bot = PopMartBot(socketio=socketio, account_index=0)
 
-    bot = PopMartBot(socketio=socketio)
-
-    def run_bot():
-        global bot
-        try:
-            bot.run(product_url, action, quantity)
-        except Exception as e:
-            bot.log(f"Bot error: {str(e)}")
-        finally:
+        def run_bot():
+            global active_bots
+            try:
                 with bot_lock:
-                    bot = None
+                    active_bots.append(bot)
+                
+                bot.run(product_url, action, quantity)
+            except Exception as e:
+                bot.log(f"Bot error: {str(e)}")
+            finally:
+                with bot_lock:
+                    if bot in active_bots:
+                        active_bots.remove(bot)
+                    if bot.driver:
+                        bot.driver.quit()
 
-    threading.Thread(target=run_bot).start()
+        # Start in new thread
+        threading.Thread(target=run_bot).start()
+        return jsonify({"success": True, "message": "Bot started"})
 
-    return jsonify({"success": True, "message": "Bot started"})
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Failed to start bot: {str(e)}"})
 
 if __name__ == '__main__':
     print(f"Template folder: {app.template_folder}")

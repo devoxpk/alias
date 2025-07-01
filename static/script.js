@@ -10,9 +10,19 @@ const logContainer = document.getElementById('log-output');
 addAccountBtn.addEventListener('click', async () => {
     const email = document.getElementById('new-email').value;
     const password = document.getElementById('new-password').value;
+    const card_number = document.getElementById('card_number').value;
+    const expiry_month = parseInt(document.getElementById('expiry_month').value);
+    const expiry_year = parseInt(document.getElementById('expiry_year').value);
+    const holder_name = document.getElementById('holder_name').value;
+    const cvv = document.getElementById('cvv').value;
 
     if (!email || !password) {
         addLog('Error: Email and password are required');
+        return;
+    }
+
+    if (!card_number || !expiry_month || !expiry_year || !holder_name || !cvv) {
+        addLog('Error: All payment details are required');
         return;
     }
 
@@ -20,7 +30,17 @@ addAccountBtn.addEventListener('click', async () => {
         const response = await fetch('http://127.0.0.1:5000/add_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ 
+                email, 
+                password,
+                payment: {
+                    card_number,
+                    expiry_month,
+                    expiry_year,
+                    holder_name,
+                    cvv
+                }
+            })
         });
         
         const result = await response.json();
@@ -29,6 +49,11 @@ addAccountBtn.addEventListener('click', async () => {
             // Clear form
             document.getElementById('new-email').value = '';
             document.getElementById('new-password').value = '';
+            document.getElementById('card_number').value = '';
+            document.getElementById('expiry_month').value = '';
+            document.getElementById('expiry_year').value = '';
+            document.getElementById('holder_name').value = '';
+            document.getElementById('cvv').value = '';
         } else {
             addLog(`Error: ${result.message || 'Failed to add account'}`);
         }
@@ -63,9 +88,9 @@ startBotBtn.addEventListener('click', async () => {
         console.log('Fetch request sent, waiting for JSON response.');
         const result = await response.json();
         if (result.success) {
-            addLog('Bot completed successfully');
+            addLog('Initializing Bot............');
         } else {
-            addLog(`Error: ${result.message || 'Bot failed to complete'}`);
+            addLog(`Error: ${result.message || 'Bot failed to Initialize'}`);
         }
     } catch (error) {
         addLog(`Network error: ${error.message}`);
