@@ -27,7 +27,7 @@
             <div class="form-section">
                 <h2>Run Bot</h2>
                 <input type="text" id="product-url" placeholder="Product URL">
-                <input type="number" id="quantity" placeholder="Quantity" min="1">
+                <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
                 <select id="action">
                     <option value="add">Add to Cart</option>
                     <option value="buy">Buy Now</option>
@@ -41,6 +41,7 @@
         <div class="logs">
             <h2>Logs</h2>
             <div id="log-output"></div>
+            <button id="clear-logs-btn">Clear Logs</button>
         </div>
     </div>
     <script src="../static/script.js"></script>

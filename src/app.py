@@ -95,6 +95,7 @@ def stop_bot():
 @app.route('/start', methods=['POST'])
 def start_bot():
     """Start new bot instance"""
+    print('request received to backend')
     global active_bots
     data = request.get_json()
 
@@ -136,4 +137,4 @@ def start_bot():
 if __name__ == '__main__':
     print(f"Template folder: {app.template_folder}")
     print(f"Static folder: {app.static_folder}")
-    socketio.run(app, debug=True, port=5000)
+    socketio.run(app, debug=True, port=9899)

@@ -20,13 +20,13 @@
         "true_mo_pay": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_selectContainer__x1gWd > div:nth-child(3) > div",
         "ordering": "#__next > div > div > div.layout_pcLayout__49ZwP > div.index_container__jIksX > div.index_leftContainer__b1UgO > div > div:nth-child(6) > div.directPay_payBtnContainer__FJanj > button",
         "quantity_increment_btn": ".index_quantityInfoBlock_ZlxOe > div.index_countButtonmJU5Q:not(.index_disableBtn_cDpGw)",
-        "credit_card_option": "div.index_optionItemActive__SEsVB",
+        "credit_card_option": "div.index_optionItem__yLztv",
         "card_input_form": "div.adyen-checkout__card-input",
-        "card_number_frame": "span[data-cse='encryptedCardNumber'] iframe",
-        "expiry_date_frame": "span[data-cse='encryptedExpiryDate'] iframe",
-        "cvv_frame": "span[data-cse='encryptedSecurityCode'] iframe",
-        "cardholder_name": "input[name='holderName']",
-        "pay_button": "button.adyen-checkout__button--pay"
+        "card_number_frame": "iframe[name*='encryptedCardNumber']",
+        "expiry_date_frame": "iframe[name*='encryptedExpiryDate']",
+        "cvv_frame": "iframe[name*='encryptedSecurityCode']",
+        "cardholder_name": "input[id*='holderName']",
+        "pay_button": "button.adyen-checkout__button.adyen-checkout__button--pay"
     },
     "accounts": [
         {

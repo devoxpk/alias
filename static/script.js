@@ -1,5 +1,5 @@
 // WebSocket connection for real-time logs
-const socket = io('http://127.0.0.1:5000');
+const socket = io('http://127.0.0.1:9899');
 
 // DOM Elements
 const addAccountBtn = document.getElementById('add-account-btn');
@@ -27,7 +27,7 @@ addAccountBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/add_account', {
+        const response = await fetch('http://127.0.0.1:9899/add_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -74,25 +74,43 @@ startBotBtn.addEventListener('click', async () => {
     }
 
     try {
-        addLog('Starting bot...');
-        console.log('Attempting to send fetch request to /start');
-        const response = await fetch('http://127.0.0.1:5000/start', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                product_url: productUrl, 
-                quantity, 
-                action 
-            })
-        });
-        console.log('Fetch request sent, waiting for JSON response.');
-        const result = await response.json();
-        if (result.success) {
-            addLog('Initializing Bot............');
-        } else {
-            addLog(`Error: ${result.message || 'Bot failed to Initialize'}`);
-        }
-    } catch (error) {
+  addLog('Starting bot...');
+  console.log('Attempting to send fetch request to /start');
+
+  // timeout helper
+  const fetchWithTimeout = (url, options = {}, timeout = 9899) =>
+    Promise.race([
+      fetch(url, options),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out')), timeout)
+      )
+    ]);
+
+  const response = await fetchWithTimeout('http://127.0.0.1:9899/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      product_url: productUrl,
+      quantity,
+      action
+    })
+  }, 10000); // 10s timeout
+
+  console.log('Fetch request sent, waiting for JSON response.');
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const result = await response.json();
+
+  if (result.success) {
+    addLog('Initializing Bot............');
+  } else {
+    addLog(`Error: ${result.message || 'Bot failed to initialize'}`);
+  }
+
+} catch (error) {
         addLog(`Network error: ${error.message}`);
     }
 });
@@ -103,7 +121,7 @@ if (stopBotBtn) {  // Check if stop button exists
     stopBotBtn.addEventListener('click', async () => {
         try {
             addLog('Stopping bot...');
-            const response = await fetch('http://127.0.0.1:5000/stop', {
+            const response = await fetch('http://127.0.0.1:9899/start', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -133,6 +151,12 @@ function addLog(message) {
     // Auto-scroll to bottom
     logContainer.scrollTop = logContainer.scrollHeight;
 }
+
+// Clear logs button
+document.getElementById('clear-logs-btn').addEventListener('click', () => {
+    document.getElementById('log-output').innerHTML = '';
+    addLog('Logs cleared');
+});
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
