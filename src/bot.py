@@ -1606,105 +1606,75 @@ class PopMartBot:
     def fill_credit_card_and_pay(self):
         """
         1) Click the Credit Card option
-        2) Wait for and type into each field as soon as its iframe+input is ready
+        2) Wait for and type into each .gsf-holder input dynamically
         3) Click Pay
         """
         try:
-            # Load payment details
-            account = self.config['accounts'][self.account_index]
-            payment = account.get('payment') or {}
-            if not payment:
-                raise ValueError("No payment details configured")
+         # Load payment details
+         account = self.config['accounts'][self.account_index]
+         payment = account.get('payment') or {}
+         if not payment:
+            raise ValueError("No payment details configured")
 
-            nums = {
-                'card': payment['card_number'],
-                'expiry': f"{payment['expiry_month']:02d}{payment['expiry_year']%100:02d}",
-                'cvv': payment['cvv'],
-                'name': payment['holder_name']
-            }
+         nums = [
+            ('Card Number', payment['card_number'], False),
+            ('Expiry Date', f"{payment['expiry_month']:02d}{payment['expiry_year']%100:02d}", False),
+            ('CVV', payment['cvv'], True),
+            ('Cardholder Name', payment['holder_name'], False)
+         ]
 
-            # 1) Select Credit Card
-            cc_sel = self.config['selectors']['credit_card_option']
-            cc_option = WebDriverWait(self.driver, 15).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, cc_sel))
+         # 1) Select Credit Card
+         cc_sel = self.config['selectors']['credit_card_option']
+         cc_option = WebDriverWait(self.driver, 15).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, cc_sel))
+         )
+         self._simulate_mouse_gesture(cc_option, "natural")
+         self.log("✔ Selected Credit Card option")
+
+         # 2) Find all holder containers and enter data in order
+         self.log("Waiting for credit card input containers…")
+         holders = WebDriverWait(self.driver, 15).until(
+            lambda d: d.find_elements(By.CSS_SELECTOR, ".gsf-holder")  # returns list
+         )
+         if len(holders) < len(nums):
+            raise RuntimeError(f"Expected at least {len(nums)} .gsf-holder elements, found {len(holders)}")
+
+         for idx, (field_name, text, mask) in enumerate(nums):
+            holder = holders[idx]
+            self.log(f"Locating {field_name} container (index {idx})…")
+
+            # Wait until input is present inside this holder
+            inp = WebDriverWait(self.driver, 15).until(
+                lambda d: holder.find_element(By.CSS_SELECTOR, "input")
             )
-            self._simulate_mouse_gesture(cc_option, "natural")
-            self.log("✔ Selected Credit Card option")
+            # Bring into view and click
+            ActionChains(self.driver).move_to_element(inp).click().pause(0.1).perform()
+            self.log(f"✔ {field_name} field ready; typing…")
 
-            # helper: switch into iframe+input, click, type
-            def type_in_frame(frame_sel, text, field_name, mask=False):
-                self.log(f"Waiting for {field_name} iframe…")
-                iframe = WebDriverWait(self.driver, 15).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, frame_sel))
-                )
-                # focus via mouse
-                ActionChains(self.driver).move_to_element(iframe).pause(0.3).click().perform()
-                self.driver.switch_to.frame(iframe)
+            # Type each character
+            for ch in text:
+                inp.send_keys("•" if mask else ch)
+                delay = random.uniform(0.05, 0.25)
+                self.log(f"   · Typed '{'•' if mask else ch}' into {field_name}, pause {delay:.2f}s")
+                time.sleep(delay)
 
-                # wait for the input inside
-                inp = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, "input"))
-                )
-                ActionChains(self.driver).move_to_element(inp).click().perform()
-                self.log(f"✔ {field_name} field ready; typing…")
+         # 3) Click Pay
+         self.log("Locating Pay button…")
+         pay_btn = WebDriverWait(self.driver, 15).until(
+             EC.element_to_be_clickable((By.CSS_SELECTOR,
+                self.config['selectors']['pay_button']))
+          )
+         self._simulate_human_mouse_movement()
+         self._simulate_mouse_gesture(pay_btn, "natural")
+         self.log("✔ Pay clicked; awaiting confirmation…")
 
-                # human‐type or mask
-                for ch in text:
-                    inp.send_keys("•" if mask else ch)
-                    delay = random.uniform(0.05, 0.25)
-                    self.log(f"   · Typed into {field_name}, pause {delay:.2f}s")
-                    time.sleep(delay)
-                self.driver.switch_to.default_content()
-
-            # 2a) Card Number
-            type_in_frame(
-                self.config['selectors']['card_number_frame'],
-                nums['card'],
-                "Card Number"
-            )
-
-            # 2b) Expiry Date
-            type_in_frame(
-                self.config['selectors']['expiry_date_frame'],
-                nums['expiry'],
-                "Expiry Date"
-            )
-
-            # 2c) CVV
-            type_in_frame(
-                self.config['selectors']['cvv_frame'],
-                nums['cvv'],
-                "CVV",
-                mask=True
-            )
-
-            # 2d) Cardholder Name (no iframe)
-            self.log("Locating cardholder name field…")
-            name_el = WebDriverWait(self.driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR,
-                    self.config['selectors']['cardholder_name']))
-            )
-            self._simulate_mouse_gesture(name_el, "natural")
-            self.log("✔ Name field ready; typing…")
-            for ch in nums['name']:
-                name_el.send_keys(ch)
-                time.sleep(random.uniform(0.05, 0.25))
-
-            # 3) Click Pay
-            self.log("Locating Pay button…")
-            pay_btn = WebDriverWait(self.driver, 15).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR,
-                    self.config['selectors']['pay_button']))
-            )
-            self._simulate_human_mouse_movement()
-            self._simulate_mouse_gesture(pay_btn, "natural")
-            self.log("✔ Pay clicked; awaiting confirmation…")
-
-            return True
+         return True
 
         except Exception as e:
-            self.log(f"ERROR in fill_credit_card_and_pay: {e}")
-            raise
+         self.log(f"ERROR in fill_credit_card_and_pay: {e}")
+         raise
+
+    
     def complete_purchase(self):
         """Complete the checkout process using mouse gestures"""
         try:

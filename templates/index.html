@@ -1,48 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PopMart Bot (Selenium)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopMart Automation Suite</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../static/styles.css">
     <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>PopMart Automation Tool</h1>
-        
-        <div class="grid-container">
-            <!-- Account Form -->
-            <div class="form-section">
-                <h2>Add Account</h2>
-                <input type="email" id="new-email" placeholder="Google Email">
-                <input type="password" id="new-password" placeholder="PopMart Password">
-                <input type="text" id="card_number" placeholder="Card Number">
-                <input type="number" id="expiry_month" placeholder="Expiry Month" min="1" max="12">
-                <input type="number" id="expiry_year" placeholder="Expiry Year" min="2023" max="2100">
-                <input type="text" id="holder_name" placeholder="Card Holder Name">
-                <input type="text" id="cvv" placeholder="CVV">
-                <button id="add-account-btn">Save Account</button>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-section">
+                <i class="fas fa-robot"></i>
+                <h1>PopMart Automation Suite</h1>
+            </div>
+            <p class="subtitle">Professional Bot Management Interface</p>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard-grid">
+                <!-- Account Management Card -->
+                <div class="card account-card">
+                    <div class="card-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h2>Account Configuration</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-group">
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="new-email" placeholder="Google Email" autocomplete="off">
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="new-password" placeholder="PopMart Password" autocomplete="off">
+                            </div>
+                            <div class="payment-details">
+                                <h3>Payment Information</h3>
+                                <div class="input-group">
+                                    <i class="fas fa-credit-card"></i>
+                                    <input type="text" id="card_number" placeholder="Card Number" autocomplete="off">
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-group half">
+                                        <i class="fas fa-calendar"></i>
+                                        <input type="number" id="expiry_month" placeholder="MM" min="1" max="12">
+                                    </div>
+                                    <div class="input-group half">
+                                        <input type="number" id="expiry_year" placeholder="YYYY" min="2023" max="2100">
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="holder_name" placeholder="Card Holder Name">
+                                </div>
+                                <div class="input-group">
+                                    <i class="fas fa-key"></i>
+                                    <input type="text" id="cvv" placeholder="CVV" maxlength="4">
+                                </div>
+                            </div>
+                            <button id="add-account-btn" class="btn-primary">
+                                <i class="fas fa-save"></i> Save Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bot Control Card -->
+                <div class="card bot-card">
+                    <div class="card-header">
+                        <i class="fas fa-cogs"></i>
+                        <h2>Bot Controls</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="form-group">
+                            <div class="input-group">
+                                <i class="fas fa-link"></i>
+                                <input type="text" id="product-url" placeholder="Product URL">
+                            </div>
+                            <div class="input-row">
+                                <div class="input-group">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
+                                </div>
+                                <div class="input-group">
+                                    <i class="fas fa-tasks"></i>
+                                    <select id="action" class="select-styled">
+                                        <option value="add">Add to Cart</option>
+                                        <option value="buy">Buy Now</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button id="start-bot-btn" class="btn-success">
+                                    <i class="fas fa-play"></i> Start Bot
+                                </button>
+                                <button id="stop-bot-btn" class="btn-danger">
+                                    <i class="fas fa-stop"></i> Stop Bot
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <!-- Product Form -->
-            <div class="form-section">
-                <h2>Run Bot</h2>
-                <input type="text" id="product-url" placeholder="Product URL">
-                <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
-                <select id="action">
-                    <option value="add">Add to Cart</option>
-                    <option value="buy">Buy Now</option>
-                </select>
-                <button id="start-bot-btn">Start Bot</button>
-                <button id="stop-bot-btn">Stop Bot</button>
+            <!-- Logs Section -->
+            <div class="card logs-card">
+                <div class="card-header">
+                    <i class="fas fa-terminal"></i>
+                    <h2>Operation Logs</h2>
+                    <button id="clear-logs-btn" class="btn-secondary">
+                        <i class="fas fa-broom"></i> Clear
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="log-output" class="log-container"></div>
+                </div>
             </div>
-        </div>
+        </main>
 
-        <!-- Logs -->
-        <div class="logs">
-            <h2>Logs</h2>
-            <div id="log-output"></div>
-            <button id="clear-logs-btn">Clear Logs</button>
-        </div>
+        <footer class="app-footer">
+            <p>© 2024 PopMart Automation Suite. All rights reserved.</p>
+        </footer>
     </div>
     <script src="../static/script.js"></script>
 </body>

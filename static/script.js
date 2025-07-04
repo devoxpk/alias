@@ -63,7 +63,9 @@ addAccountBtn.addEventListener('click', async () => {
 });
 
 // Start the bot
-startBotBtn.addEventListener('click', async () => {
+startBotBtn.addEventListener('click', async (event) => {
+    event.preventDefault();
+    console.log("start button called")
     const productUrl = document.getElementById('product-url').value;
     const quantity = parseInt(document.getElementById('quantity').value);
     const action = document.getElementById('action').value;
@@ -121,7 +123,7 @@ if (stopBotBtn) {  // Check if stop button exists
     stopBotBtn.addEventListener('click', async () => {
         try {
             addLog('Stopping bot...');
-            const response = await fetch('http://127.0.0.1:9899/start', {
+            const response = await fetch('http://127.0.0.1:9899/stop', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
