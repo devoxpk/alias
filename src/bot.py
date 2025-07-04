@@ -105,6 +105,9 @@ class PopMartBot:
                 version_main=138
             )
 
+            # Maximize browser window
+            self.driver.maximize_window()
+
             # Set geolocation
             if self.current_coords:
                 self.driver.execute_cdp_cmd("Emulation.setGeolocationOverride", {
