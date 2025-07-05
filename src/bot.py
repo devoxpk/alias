@@ -382,9 +382,9 @@ class PopMartBot:
             
             # Define PopMart domains to target
             popmart_domains = [
-                "popmart.com", 
-                "popmart", 
-                "popmartglobal"
+                "popmart.com/us", 
+                "popmart.com/us/account", 
+                "popmart.com/us/user/login"
             ]
             
             # 1. Selectively clear cookies for PopMart domains only
