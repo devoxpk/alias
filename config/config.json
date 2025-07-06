@@ -30,14 +30,20 @@
     },
     "accounts": [
         {
-            "email": "clarapolakmd@gmail.com",
-            "password": "auto123!",
+            "email": "devoxpk@gmail.com",
+            "password": "Devox 666",
             "payment": {
                 "card_number": "4111111111111111",
                 "expiry_month": 12,
                 "expiry_year": 2025,
                 "holder_name": "CLARA POLAK",
                 "cvv": "123"
+            },
+            "session": {
+                "cookies": null,
+                "local_storage": null,
+                "session_storage": null,
+                "last_login": null
             }
         },
         {
@@ -49,6 +55,12 @@
                 "expiry_year": 2026,
                 "holder_name": "BEN MC",
                 "cvv": "456"
+            },
+            "session": {
+                "cookies": null,
+                "local_storage": null,
+                "session_storage": null,
+                "last_login": null
             }
         },
         {
@@ -60,6 +72,12 @@
                 "expiry_year": 2027,
                 "holder_name": "test holder",
                 "cvv": "123"
+            },
+            "session": {
+                "cookies": null,
+                "local_storage": null,
+                "session_storage": null,
+                "last_login": null
             }
         }
     ]
