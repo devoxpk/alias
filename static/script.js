@@ -1,5 +1,5 @@
 // WebSocket connection for real-time logs
-const socket = io('http://127.0.0.1:9899');
+const socket = io('http://65.1.64.161:9899');
 
 // DOM Elements
 const addAccountBtn = document.getElementById('add-account-btn');
@@ -27,7 +27,7 @@ addAccountBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:9899/add_account', {
+        const response = await fetch('http://65.1.64.161:9899/add_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -88,7 +88,7 @@ startBotBtn.addEventListener('click', async (event) => {
       )
     ]);
 
-  const response = await fetchWithTimeout('http://127.0.0.1:9899/start', {
+  const response = await fetchWithTimeout('http://65.1.64.161:9899/start', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -123,7 +123,7 @@ if (stopBotBtn) {  // Check if stop button exists
     stopBotBtn.addEventListener('click', async () => {
         try {
             addLog('Stopping bot...');
-            const response = await fetch('http://127.0.0.1:9899/stop', {
+            const response = await fetch('http://65.1.64.161:9899/stop', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });

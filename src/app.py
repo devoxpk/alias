@@ -137,4 +137,10 @@ def start_bot():
 if __name__ == '__main__':
     print(f"Template folder: {app.template_folder}")
     print(f"Static folder: {app.static_folder}")
-    socketio.run(app, debug=True, port=9899)
+    socketio.run(
+        app,
+        host="0.0.0.0",
+        port=9899,
+        debug=True,
+        allow_unsafe_werkzeug=True
+    )
