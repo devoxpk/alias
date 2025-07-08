@@ -98,10 +98,11 @@ class PopMartBot:
             service = Service(executable_path=os.path.join(os.getcwd(), 'chromedriver-win64', 'chromedriver.exe'))
            
             self.driver = uc.Chrome(
-                options=options, 
+                options=options,
+                service=service,
                 headless=False,  # Set to True if you want headless
                 use_subprocess=True,
-                version_main="138.0.7204.100"
+                version_main=138
             )
 
             # Maximize browser window
