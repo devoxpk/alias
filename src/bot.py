@@ -67,6 +67,15 @@ class PopMartBot:
             # TLS fingerprint matching real Chrome browser settings
             # Use exact Chrome 137 cipher suites for TLS fingerprint matching
             options.add_argument('--ssl-version-min=tls1.2')
+            os.system("Xvfb :99 -screen 0 1920x1080x24 &")
+            os.environ["DISPLAY"] = ":99"
+
+             # Clean stale session locks
+            os.system("rm -rf ~/.config/google-chrome/SingletonLock ~/.config/google-chrome/SingletonSocket")
+
+            options = uc.ChromeOptions()
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--ssl-version-max=tls1.3')
             # Don't blacklist ciphers to match real Chrome TLS fingerprint
             options.add_argument('--disable-features=IsolateOrigins,site-per-process')
@@ -99,10 +108,10 @@ class PopMartBot:
            
             self.driver = uc.Chrome(
                 options=options,
-                service=service,
+                
                 headless=False,  # Set to True if you want headless
                 use_subprocess=True,
-                version_main=138
+                
             )
 
             # Maximize browser window
