@@ -1,5 +1,5 @@
 // WebSocket connection for real-time logs
-const socket = io('http://65.1.64.161:9899');
+const socket = io(window.location.origin);
 
 // DOM Elements
 const addAccountBtn = document.getElementById('add-account-btn');
@@ -27,7 +27,7 @@ addAccountBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('http://65.1.64.161:9899/add_account', {
+        const response = await fetch('/add_account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -68,7 +68,7 @@ startBotBtn.addEventListener('click', async (event) => {
     console.log("start button called")
     const productUrl = document.getElementById('product-url').value;
     const quantity = parseInt(document.getElementById('quantity').value);
-    const action = document.getElementById('action').value;
+    const action = 'buy';
 
     if (!productUrl || !quantity) {
         addLog('Error: Product URL and quantity are required');
@@ -76,43 +76,43 @@ startBotBtn.addEventListener('click', async (event) => {
     }
 
     try {
-  addLog('Starting bot...');
-  console.log('Attempting to send fetch request to /start');
+        addLog('Starting bot...');
+        console.log('Attempting to send fetch request to /start');
 
-  // timeout helper
-  const fetchWithTimeout = (url, options = {}, timeout = 9899) =>
-    Promise.race([
-      fetch(url, options),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out')), timeout)
-      )
-    ]);
+        // timeout helper
+        const fetchWithTimeout = (url, options = {}, timeout = 9899) =>
+            Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Request timed out')), timeout)
+                )
+            ]);
 
-  const response = await fetchWithTimeout('http://65.1.64.161:9899/start', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      product_url: productUrl,
-      quantity,
-      action
-    })
-  }, 10000); // 10s timeout
+        const response = await fetchWithTimeout('/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                product_url: productUrl,
+                quantity,
+                action
+            })
+        }, 10000); // 10s timeout
 
-  console.log('Fetch request sent, waiting for JSON response.');
+        console.log('Fetch request sent, waiting for JSON response.');
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
 
-  const result = await response.json();
+        const result = await response.json();
 
-  if (result.success) {
-    addLog('Initializing Bot............');
-  } else {
-    addLog(`Error: ${result.message || 'Bot failed to initialize'}`);
-  }
+        if (result.success) {
+            addLog('Initializing Bot............');
+        } else {
+            addLog(`Error: ${result.message || 'Bot failed to initialize'}`);
+        }
 
-} catch (error) {
+    } catch (error) {
         addLog(`Network error: ${error.message}`);
     }
 });
@@ -123,7 +123,7 @@ if (stopBotBtn) {  // Check if stop button exists
     stopBotBtn.addEventListener('click', async () => {
         try {
             addLog('Stopping bot...');
-            const response = await fetch('http://65.1.64.161:9899/stop', {
+            const response = await fetch('/stop', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });

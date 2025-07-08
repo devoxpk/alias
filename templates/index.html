@@ -6,7 +6,7 @@
     <title>PopMart Automation Suite</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
 </head>
 <body>
@@ -37,7 +37,7 @@
                                 <i class="fas fa-lock"></i>
                                 <input type="password" id="new-password" placeholder="PopMart Password" autocomplete="off">
                             </div>
-                            <div class="payment-details">
+                            <!-- <div class="payment-details">
                                 <h3>Payment Information</h3>
                                 <div class="input-group">
                                     <i class="fas fa-credit-card"></i>
@@ -60,7 +60,7 @@
                                     <i class="fas fa-key"></i>
                                     <input type="text" id="cvv" placeholder="CVV" maxlength="4">
                                 </div>
-                            </div>
+                            </div> -->
                             <button id="add-account-btn" class="btn-primary">
                                 <i class="fas fa-save"></i> Save Account
                             </button>
@@ -85,13 +85,13 @@
                                     <i class="fas fa-shopping-cart"></i>
                                     <input type="number" id="quantity" placeholder="Quantity" min="1" value="1">
                                 </div>
-                                <div class="input-group">
+                                <!-- <div class="input-group">
                                     <i class="fas fa-tasks"></i>
                                     <select id="action" class="select-styled">
                                         <option value="add">Add to Cart</option>
                                         <option value="buy">Buy Now</option>
                                     </select>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="button-group">
                                 <button id="start-bot-btn" class="btn-success">
@@ -125,6 +125,6 @@
             <p>© 2024 PopMart Automation Suite. All rights reserved.</p>
         </footer>
     </div>
-    <script src="../static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -4,7 +4,6 @@ import os
 import json
 from bot import PopMartBot
 import threading
-from flask_cors import CORS
 
 # Global bot management
 active_bots = []
@@ -16,8 +15,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__,
             template_folder=os.path.join(PROJECT_ROOT, 'templates'),
             static_folder=os.path.join(PROJECT_ROOT, 'static'))
-socketio = SocketIO(app, cors_allowed_origins="*")
-CORS(app)
+socketio = SocketIO(app)
 CONFIG_PATH = os.path.join(PROJECT_ROOT, 'config', 'config.json')
 
 @app.route('/')
@@ -137,10 +135,4 @@ def start_bot():
 if __name__ == '__main__':
     print(f"Template folder: {app.template_folder}")
     print(f"Static folder: {app.static_folder}")
-    socketio.run(
-        app,
-        host="0.0.0.0",
-        port=9899,
-        debug=True,
-        allow_unsafe_werkzeug=True
-    )
+    socketio.run(app, debug=True, host='0.0.0.0', port=9899)
